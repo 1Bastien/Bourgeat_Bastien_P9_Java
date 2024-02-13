@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Accueil</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+		integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+	<link th:href="@{/css/style.css}" rel="stylesheet" />
+</head>
+
+<body>
+	<div th:replace="~{fragments/header.html}" />
+
+	<div class="content" style="display: flex;">
+		<div th:if="${error}" class="alert alert-danger" role="alert">
+			<p th:text="${error}"></p>
+		</div>
+		<div class="cta">
+			<h2>Bienvenue sur Médilabo</h2>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
+				dolore magna aliqua.</p>
+			<a class="btn btn-primary" href="/login">Se connecter</a>
+		</div>
+	</div>
+
+	<div th:replace="~{fragments/footer.html}" />
+
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+		integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"
+		integrity="sha384-LHDN/zrxr8J5jKRg2A0Tf50sU0baLT+VWF5UczrH5oK8fftkJx7tgF+7bJg4I/pJ"
+		crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+		integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shCpw3r/JFwBD1jzOeKVLAf/hBtw5peRUkhJy"
+		crossorigin="anonymous"></script>
+</body>
+
+</html>
