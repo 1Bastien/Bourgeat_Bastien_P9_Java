@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Erreur</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			text-align: center;
+		}
+
+		.container {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
+
+		.error-code {
+			font-size: 36px;
+			margin-bottom: 20px;
+		}
+
+		.error-message {
+			font-size: 18px;
+			margin-bottom: 30px;
+		}
+
+		.btn-home {
+			padding: 10px 20px;
+			background-color: #007bff;
+			color: #fff;
+			text-decoration: none;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+		}
+
+		.btn-home:hover {
+			background-color: #0056b3;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<div class="error-code" th:text="${status.value()}"></div>
+		<div class="error-message" th:text="${error.message()}"></div>
+		<a th:href="@{/}" class="btn-home">Retour à l'accueil</a>
+	</div>
+</body>
+
+</html>
