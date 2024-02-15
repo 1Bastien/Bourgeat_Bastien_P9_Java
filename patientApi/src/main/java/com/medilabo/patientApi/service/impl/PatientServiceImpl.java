@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.medilabo.patientApi.model.Patient;
@@ -23,6 +24,7 @@ public class PatientServiceImpl implements PatientService {
 	private PatientRepository patientRepository;
 
 	@Override
+	@Transactional
 	public Patient addPatient(Patient patient) {
 		if (patientRepository.existsByFirstNameAndLastNameAndDateOfBirth(patient.getFirstName(), patient.getLastName(),
 				patient.getDateOfBirth())) {
@@ -40,6 +42,7 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<Patient> getPatients() {
 		try {
 			return patientRepository.findAll();
@@ -50,6 +53,7 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Patient getPatientById(Long id) {
 		if (!patientRepository.existsById(id)) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Patient not found");
@@ -63,6 +67,7 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	@Override
+	@Transactional
 	public Patient updatePatient(Long id, Patient patient) {
 		if (!patientRepository.existsById(id)) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Patient not found");
@@ -87,6 +92,7 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	@Override
+	@Transactional
 	public void deletePatient(Long id) {
 		if (!patientRepository.existsById(id)) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Patient not found");

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.medilabo.patientApi.model.Gender;
 import com.medilabo.patientApi.model.Patient;
@@ -23,12 +24,17 @@ public class DataLoader implements CommandLineRunner {
 	private PatientRepository patientRepository;
 
 	@Override
+	@Transactional
 	public void run(String... args) throws Exception {
 
 		try {
+			logger.info("Deleting all patient data from database");
 			patientRepository.deleteAll();
 
+			logger.info("Adding patient data to database");
+
 			Patient patientNone = new Patient();
+			patientNone.setId(Long.valueOf(1));
 			patientNone.setFirstName("TestNone");
 			patientNone.setLastName("Test");
 			patientNone.setDateOfBirth(LocalDate.parse("1966-12-31"));
@@ -38,6 +44,7 @@ public class DataLoader implements CommandLineRunner {
 			patientRepository.save(patientNone);
 
 			Patient patientBoderline = new Patient();
+			patientBoderline.setId(Long.valueOf(2));
 			patientBoderline.setFirstName("TestBorderline");
 			patientBoderline.setLastName("Test");
 			patientBoderline.setDateOfBirth(LocalDate.parse("1945-06-24"));
@@ -47,6 +54,7 @@ public class DataLoader implements CommandLineRunner {
 			patientRepository.save(patientBoderline);
 
 			Patient patientInDanger = new Patient();
+			patientInDanger.setId(Long.valueOf(3));
 			patientInDanger.setFirstName("TestInDanger");
 			patientInDanger.setLastName("Test");
 			patientInDanger.setDateOfBirth(LocalDate.parse("2004-06-18"));
@@ -56,6 +64,7 @@ public class DataLoader implements CommandLineRunner {
 			patientRepository.save(patientInDanger);
 
 			Patient patientEarlyOnset = new Patient();
+			patientEarlyOnset.setId(Long.valueOf(4));
 			patientEarlyOnset.setFirstName("TestEarlyOnset");
 			patientEarlyOnset.setLastName("Test");
 			patientEarlyOnset.setDateOfBirth(LocalDate.parse("2002-06-28"));
@@ -69,4 +78,5 @@ public class DataLoader implements CommandLineRunner {
 			throw new Exception("Error while adding patient");
 		}
 	}
+
 }
