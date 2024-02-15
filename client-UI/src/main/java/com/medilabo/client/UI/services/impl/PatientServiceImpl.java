@@ -28,9 +28,9 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	@Override
-	public String getPatientsList(Model model, HttpServletRequest response) {
+	public String getPatientsList(Model model, HttpServletRequest request) {
 		try {
-			String authorizationHeader = cookieService.getCookie(response);
+			String authorizationHeader = cookieService.getCookie(request);
 
 			if (authorizationHeader == null) {
 				logger.error("Unauthorized access to /patient/list. Redirecting to /login.");
@@ -44,14 +44,14 @@ public class PatientServiceImpl implements PatientService {
 		} catch (Exception e) {
 
 			logger.error("Error while trying to get patients: " + e.getMessage());
-			return "redirect:/error/error";
+			return "redirect:/error";
 		}
 	}
 
 	@Override
-	public String getPatient(Long id, Model model, HttpServletRequest response) {
+	public String getPatient(Long id, Model model, HttpServletRequest request) {
 		try {
-			String authorizationHeader = cookieService.getCookie(response);
+			String authorizationHeader = cookieService.getCookie(request);
 
 			if (authorizationHeader == null) {
 				logger.error("Unauthorized access to /patient/detail. Redirecting to /login.");
@@ -65,14 +65,14 @@ public class PatientServiceImpl implements PatientService {
 
 		} catch (Exception e) {
 			logger.error("Error while trying to get patient: " + e.getMessage());
-			return "redirect:/error/error";
+			return "redirect:/error";
 		}
 	}
 
 	@Override
-	public String updatePatient(Long id, PatientDto newPatient, Model model, HttpServletRequest response) {
+	public String updatePatient(Long id, PatientDto newPatient, Model model, HttpServletRequest request) {
 		try {
-			String authorizationHeader = cookieService.getCookie(response);
+			String authorizationHeader = cookieService.getCookie(request);
 
 			if (authorizationHeader == null) {
 				logger.error("Unauthorized access to /patient/update. Redirecting to /login.");
@@ -85,15 +85,15 @@ public class PatientServiceImpl implements PatientService {
 
 		} catch (Exception e) {
 			logger.error("Error while trying to update patient: " + e.getMessage());
-			return "redirect:error";
+			return "redirect:/error";
 		}
 	}
 
 	@Override
-	public String getFormAddPatient(Model model, HttpServletRequest response) {
+	public String getFormAddPatient(Model model, HttpServletRequest request) {
 		try {
 
-			String authorizationHeader = cookieService.getCookie(response);
+			String authorizationHeader = cookieService.getCookie(request);
 
 			if (authorizationHeader == null) {
 				logger.error("Unauthorized access to /patient/add. Redirecting to /login.");
@@ -105,14 +105,14 @@ public class PatientServiceImpl implements PatientService {
 
 		} catch (Exception e) {
 			logger.error("Error while trying to get form to add patient: " + e.getMessage());
-			return "redirect:/error/error";
+			return "redirect:/error";
 		}
 	}
 
 	@Override
-	public String addPatient(PatientDto patient, Model model, HttpServletRequest response) {
+	public String addPatient(PatientDto patient, Model model, HttpServletRequest request) {
 		try {
-			String authorizationHeader = cookieService.getCookie(response);
+			String authorizationHeader = cookieService.getCookie(request);
 
 			if (authorizationHeader == null) {
 				logger.error("Unauthorized access to /patient/add. Redirecting to /login.");
@@ -124,14 +124,14 @@ public class PatientServiceImpl implements PatientService {
 			return "redirect:/patient/list";
 		} catch (Exception e) {
 			logger.error("Error while trying to add patient: " + e.getMessage());
-			return "redirect:/error/error";
+			return "redirect:/error";
 		}
 	}
 
 	@Override
-	public String deletePatient(Long id, Model model, HttpServletRequest response) {
+	public String deletePatient(Long id, Model model, HttpServletRequest request) {
 		try {
-			String authorizationHeader = cookieService.getCookie(response);
+			String authorizationHeader = cookieService.getCookie(request);
 
 			if (authorizationHeader == null) {
 				logger.error("Unauthorized access to /patient/delete. Redirecting to /login.");
@@ -143,7 +143,7 @@ public class PatientServiceImpl implements PatientService {
 			return "redirect:/patient/list";
 		} catch (Exception e) {
 			logger.error("Error while trying to delete patient: " + e.getMessage());
-			return "redirect:/error/error";
+			return "redirect:/error";
 		}
 	}
 }
