@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
+import com.medilabo.client.UI.Dto.FeedbackDto;
 import com.medilabo.client.UI.Dto.PatientDto;
 import com.medilabo.client.UI.configuration.GatewayFeignConfiguration;
 
@@ -33,4 +34,11 @@ public interface GatewayProxy {
 
 	@GetMapping("/login")
 	ResponseEntity<String> login(@RequestHeader("Authorization") String authorizationHeader);
+
+	@GetMapping("/feedback-service/feedback/patient/{id}")
+	List<FeedbackDto> getPatientFeedback(@PathVariable("id") Long patientId, @RequestHeader("Authorization") String authorizationHeader);
+
+	@PostMapping("/feedback-service/feedback/patient")
+	FeedbackDto addPatientFeedback(FeedbackDto feedback, @RequestHeader("Authorization") String authorizationHeader);
+
 }
