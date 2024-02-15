@@ -11,13 +11,7 @@
 </head>
 
 <body>
-	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-		<a class="navbar-brand" href="/">Médilabo</a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-			aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-	</nav>
+	<div th:replace="~{fragments/header.html}" />
 	<div class="content">
 		<div class="container-fluid">
 			<div class="row mt-4">
@@ -47,6 +41,8 @@
 										<td th:text="${patient.gender}"></td>
 										<td th:text="${patient.address}"></td>
 										<td>
+											<a th:href="@{/patient/feedback/{id}(id=${patient.id})}"
+												class="btn btn-success btn-sm">Voir commentaires</a>
 											<a th:href="@{/patient/update/{id}(id=${patient.id})}"
 												class="btn btn-primary btn-sm">Modifier</a>
 											<a th:href="@{/patient/delete/{id}(id=${patient.id})}"
