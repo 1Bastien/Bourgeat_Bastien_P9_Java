@@ -10,7 +10,11 @@ public class CustomRouteLocator {
 
 	@Bean
 	RouteLocator gatewayRouteLocator(RouteLocatorBuilder builder) {
-		return builder.routes().route("patient-api",
-				r -> r.path("/patient-api/**").filters(f -> f.stripPrefix(1)).uri("lb://patient-api")).build();
+		return builder.routes()
+				.route("patient-api",
+						r -> r.path("/patient-api/**").filters(f -> f.stripPrefix(1)).uri("lb://patient-api"))
+				.route("feedback-service",
+						r -> r.path("/feedback-service/**").filters(f -> f.stripPrefix(1)).uri("lb://feedback-service"))
+				.build();
 	}
 }
