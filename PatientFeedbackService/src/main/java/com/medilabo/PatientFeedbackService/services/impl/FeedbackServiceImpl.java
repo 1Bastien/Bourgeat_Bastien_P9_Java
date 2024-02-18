@@ -23,13 +23,14 @@ public class FeedbackServiceImpl implements FeedbackService {
 
 	@Override
 	public List<Feedback> getFeedbackByPatientId(Long patientId) {
-		List<Feedback> feedbacks = feedbackRepository.findByPatientId(patientId);
+		try {
+			List<Feedback> feedbacks = feedbackRepository.findByPatientId(patientId);
+			return feedbacks;
 
-		if (feedbacks.isEmpty()) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No feedback found for the patient.");
+		} catch (Exception e) {
+			logger.error("Error while getting feedbacks", e);
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while getting feedbacks");
 		}
-
-		return feedbacks;
 	}
 
 	@Override

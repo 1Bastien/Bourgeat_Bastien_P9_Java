@@ -4,7 +4,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +14,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.medilabo.PatientFeedbackService.model.Feedback;
 import com.medilabo.PatientFeedbackService.model.repository.FeedbackRepository;
@@ -63,21 +60,5 @@ public class FeedbackServiceTest {
 		verify(feedbackRepository, times(1)).findByPatientId(1L);
 
 		assertEquals(feedbackList, feedbacks);
-	}
-
-	@Test
-	public void testGetFeedbackByPatientIdNoFeedback() {
-		List<Feedback> feedbackList = new ArrayList<>();
-
-		when(feedbackRepository.findByPatientId(1L)).thenReturn(feedbackList);
-
-		ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
-			feedbackService.getFeedbackByPatientId(1L);
-		});
-
-		verify(feedbackRepository, times(1)).findByPatientId(1L);
-
-		assertEquals("No feedback found for the patient.", exception.getReason());
-		assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
 	}
 }
