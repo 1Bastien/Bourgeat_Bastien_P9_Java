@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.medilabo.client.UI.Dto.FeedbackDto;
 import com.medilabo.client.UI.services.FeedbackService;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @Controller
@@ -26,14 +25,14 @@ public class FeedbackController {
 	private FeedbackService feedbackService;
 
 	@GetMapping("/patient/feedback/{patientId}")
-	public String getFeedback(@PathVariable("patientId") Long patientId, HttpServletRequest request, Model model) {
+	public String getFeedback(@PathVariable("patientId") Long patientId, Model model) {
 		logger.info("GET /patient/update/feedback/" + patientId);
-		return feedbackService.getFeedback(patientId, model, request);
+		return feedbackService.getFeedback(patientId, model);
 	}
 
 	@PostMapping("/patient/feedback/add")
 	public String addFeedback(@Valid @ModelAttribute("feedback") FeedbackDto feedback, BindingResult result,
-			HttpServletRequest request, Model model) {
+			Model model) {
 
 		logger.info("POST /patient/feedback/add/, with body: " + feedback.toString());
 
@@ -42,6 +41,6 @@ public class FeedbackController {
 			logger.error("redirecting to /patient/feedback/" + feedback.getPatientId());
 			return "redirect:/patient/feedback/" + feedback.getPatientId();
 		}
-		return feedbackService.addFeedback(feedback, request);
+		return feedbackService.addFeedback(feedback);
 	}
 }

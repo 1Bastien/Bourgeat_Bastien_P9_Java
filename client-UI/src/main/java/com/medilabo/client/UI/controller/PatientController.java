@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.medilabo.client.UI.Dto.PatientDto;
 import com.medilabo.client.UI.services.PatientService;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @Controller
@@ -26,20 +25,20 @@ public class PatientController {
 	private PatientService patientService;
 
 	@GetMapping("/patient/list")
-	public String getPatients(HttpServletRequest request, Model model) {
+	public String getPatients(Model model) {
 		logger.info("GET /patient/list");
-		return patientService.getPatientsList(model, request);
+		return patientService.getPatientsList(model);
 	}
 
 	@GetMapping("/patient/update/{id}")
-	public String getUpdateForm(@PathVariable("id") Long id, HttpServletRequest request, Model model) {
+	public String getUpdateForm(@PathVariable("id") Long id, Model model) {
 		logger.info("GET /patient/update/" + id);
-		return patientService.getPatient(id, model, request);
+		return patientService.getPatient(id, model);
 	}
 
 	@PostMapping("/patient/update/{id}")
 	public String updatePatient(@PathVariable("id") Long id, @Valid @ModelAttribute("patient") PatientDto newPatient,
-			BindingResult result, HttpServletRequest request, Model model) {
+			BindingResult result, Model model) {
 
 		logger.info("POST /patient/update/" + id + " with body: " + newPatient.toString());
 
@@ -49,18 +48,17 @@ public class PatientController {
 			logger.error("redirecting to /patient/update/" + id);
 			return "patient/update";
 		}
-		return patientService.updatePatient(id, newPatient, model, request);
+		return patientService.updatePatient(id, newPatient);
 	}
 
 	@GetMapping("/patient/add")
-	public String getAddForm(Model model, HttpServletRequest request) {
+	public String getAddForm(Model model) {
 		logger.info("GET /patient/add");
-		return patientService.getFormAddPatient(model, request);
+		return patientService.getFormAddPatient(model);
 	}
 
 	@PostMapping("/patient/add")
-	public String addPatient(@Valid @ModelAttribute("patient") PatientDto patient, BindingResult result,
-			HttpServletRequest request, Model model) {
+	public String addPatient(@Valid @ModelAttribute("patient") PatientDto patient, BindingResult result) {
 
 		logger.info("POST /patient/add with body: " + patient.toString());
 
@@ -69,13 +67,13 @@ public class PatientController {
 			logger.error("redirecting to /patient/add");
 			return "patient/add";
 		}
-		return patientService.addPatient(patient, model, request);
+		return patientService.addPatient(patient);
 	}
 
 	@GetMapping("/patient/delete/{id}")
-	public String deletePatient(@PathVariable("id") Long id, HttpServletRequest request, Model model) {
+	public String deletePatient(@PathVariable("id") Long id) {
 		logger.info("GET /patient/delete/" + id);
 		logger.info("redirecting to /patient/list");
-		return patientService.deletePatient(id, model, request);
+		return patientService.deletePatient(id);
 	}
 }
