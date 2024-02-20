@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.medilabo.PatientFeedbackService.model.Feedback;
@@ -32,6 +33,12 @@ public class FeedbackController {
 	public Feedback addPatientFeedback(@RequestBody Feedback feedback) {
 		logger.info("POST /feedback/patient with body: " + feedback.toString());
 		return feedbackService.addFeedback(feedback);
+	}
+	
+	@GetMapping("/feedback/patient/assessment/{id}")
+	public int countWordOccurrences(@PathVariable("id") Long patientId, @RequestParam("keywords") List<String> keywords) {
+		logger.info("GET /feedback/patient/assessment/" + patientId + "with request param" + keywords);
+		return feedbackService.countWordOccurrences(patientId, keywords);
 	}
 
 }

@@ -69,4 +69,17 @@ public class FeebackControllerTest {
 		
 		verify(feedbackService, times(1)).getFeedbackByPatientId(1L);
 	}
+	
+	@Test
+	public void testCountWordOccurrences() throws Exception {
+		List<String> keywords = new ArrayList<>();
+		keywords.add("good");
+		
+		when(feedbackService.countWordOccurrences(1L, keywords)).thenReturn(1);
+
+		mockMvc.perform(get("/feedback/patient/assessment/1?keywords=good").contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk()).andReturn().getResponse().getContentAsString().equals("1");
+
+		verify(feedbackService, times(1)).countWordOccurrences(1L, keywords);
+	}
 }

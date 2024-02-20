@@ -12,4 +12,6 @@ public interface FeedbackService {
 	List<Feedback> getFeedbackByPatientId(Long patientId);
 
 	Feedback addFeedback(Feedback feedback);
+	
+	int countWordOccurrences(Long patientId, List<String> uriKeywords);
 }
