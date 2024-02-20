@@ -31,6 +31,9 @@
 			</ul>
 		</div>
 	</nav>
+	<div class="alert alert-danger alert-dismissible fade show text-center" th:if="${alert}" role="alert">
+		<strong>Attention! Indicateur de diabète :</strong> <span th:text="${assessment}"></span>
+	</div>
 	<div class="content">
 		<div class="row justify-content-center">
 			<div class="col ml-3">
@@ -39,6 +42,10 @@
 						<h2 class="mb-1" th:text="${patient.firstName}"></h2>
 					</div>
 					<div class="card-body">
+						<p class="mb-1">
+							<strong>Nom :</strong>
+							<span th:text="${patient.lastName}"></span>
+						</p>
 						<p class="mb-1">
 							<strong>Genre :</strong>
 							<span th:text="${patient.gender}"></span>
@@ -54,6 +61,11 @@
 						<p class="mb-1">
 							<strong>Adresse :</strong>
 							<span th:text="${patient.address}"></span>
+						</p>
+						<p class="mb-1">
+							<strong>Indicateur de diabète :</strong>
+							<span th:classappend="${alert} ? 'text-danger font-weight-bold' : ''"
+								th:text="${assessment}"></span>
 						</p>
 					</div>
 				</div>
