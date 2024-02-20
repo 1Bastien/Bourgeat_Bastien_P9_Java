@@ -5,13 +5,13 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import com.medilabo.client.UI.Dto.FeedbackDto;
 import com.medilabo.client.UI.Dto.PatientDto;
+import com.medilabo.client.UI.proxies.FeedbackProxy;
+import com.medilabo.client.UI.proxies.PatientProxy;
 import com.medilabo.client.UI.services.FeedbackService;
 
 @Service
@@ -19,19 +19,21 @@ public class FeedbackServiceImpl implements FeedbackService {
 
 	private static final Logger logger = LogManager.getLogger(FeedbackServiceImpl.class);
 
-	@Autowired
-	private WebClient.Builder webClient;
+	private FeedbackProxy feedbackProxy;
+	private PatientProxy patientProxy;
+
+	public FeedbackServiceImpl(FeedbackProxy feedbackProxy, PatientProxy patientProxy) {
+		this.feedbackProxy = feedbackProxy;
+		this.patientProxy = patientProxy;
+	}
 
 	@Override
 	public String getFeedback(Long patientId, Model model) {
 		try {
 
-			PatientDto patient = webClient.build().get().uri("http://gateway/patient-api/patient/" + patientId)
-					.retrieve().bodyToFlux(PatientDto.class).blockLast();
+			PatientDto patient = patientProxy.getPatient(patientId);
 
-			List<FeedbackDto> feedbacks = webClient.build().get()
-					.uri("http://gateway/feedback-service/feedback/patient/" + patientId).retrieve()
-					.bodyToFlux(FeedbackDto.class).collectList().flux().blockLast();
+			List<FeedbackDto> feedbacks = feedbackProxy.getFeedbacks(patientId);
 
 			FeedbackDto feedback = new FeedbackDto();
 			feedback.setPatientId(patientId);
@@ -54,9 +56,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 	public String addFeedback(FeedbackDto feedback) {
 		try {
 
-			PatientDto patient = webClient.build().get()
-					.uri("http://gateway/patient-api/patient/" + feedback.getPatientId()).retrieve()
-					.bodyToFlux(PatientDto.class).blockLast();
+			PatientDto patient = patientProxy.getPatient(feedback.getPatientId());
 
 			if (patient == null) {
 				logger.error("Patient with id " + feedback.getPatientId() + " not found.");
@@ -65,8 +65,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 
 			feedback.setDate(LocalDateTime.now());
 
-			webClient.build().post().uri("http://gateway/feedback-service/feedback/patient").bodyValue(feedback)
-					.retrieve().bodyToFlux(FeedbackDto.class).blockLast();
+			feedbackProxy.addFeedback(feedback);
 
 			return "redirect:/patient/feedback/" + feedback.getPatientId();
 		} catch (Exception e) {
