@@ -7,9 +7,9 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import com.medilabo.client.UI.Dto.PatientDto;
+import com.medilabo.client.UI.proxies.PatientProxy;
 import com.medilabo.client.UI.services.PatientService;
 
 @Service
@@ -18,14 +18,12 @@ public class PatientServiceImpl implements PatientService {
 	private static final Logger logger = LogManager.getLogger(PatientServiceImpl.class);
 
 	@Autowired
-	private WebClient.Builder webClient;
+	private PatientProxy patientProxy;
 
 	@Override
 	public String getPatientsList(Model model) {
 		try {
-
-			List<PatientDto> patients = webClient.build().get().uri("http://gateway/patient-api/patient/all").retrieve()
-					.bodyToFlux(PatientDto.class).collectList().flux().blockLast();
+			List<PatientDto> patients = patientProxy.getPatientsList();
 
 			model.addAttribute("patients", patients);
 
@@ -40,9 +38,7 @@ public class PatientServiceImpl implements PatientService {
 	@Override
 	public String getPatient(Long id, Model model) {
 		try {
-
-			PatientDto patient = webClient.build().get().uri("http://gateway/patient-api/patient/" + id).retrieve()
-					.bodyToFlux(PatientDto.class).blockLast();
+			PatientDto patient = patientProxy.getPatient(id);
 
 			model.addAttribute("patient", patient);
 			return "patient/update";
@@ -56,9 +52,7 @@ public class PatientServiceImpl implements PatientService {
 	@Override
 	public String updatePatient(Long id, PatientDto newPatient) {
 		try {
-
-			webClient.build().post().uri("http://gateway/patient-api/patient/update/" + id).bodyValue(newPatient)
-					.retrieve().bodyToFlux(PatientDto.class).blockLast();
+			patientProxy.updatePatient(id, newPatient);
 
 			return "redirect:/patient/list";
 
@@ -71,7 +65,6 @@ public class PatientServiceImpl implements PatientService {
 	@Override
 	public String getFormAddPatient(Model model) {
 		try {
-
 			model.addAttribute("patient", new PatientDto());
 			return "patient/add";
 
@@ -84,9 +77,7 @@ public class PatientServiceImpl implements PatientService {
 	@Override
 	public String addPatient(PatientDto patient) {
 		try {
-
-			webClient.build().post().uri("http://gateway/patient-api/patient").bodyValue(patient).retrieve()
-					.bodyToFlux(PatientDto.class).blockLast();
+			patientProxy.addPatient(patient);
 
 			return "redirect:/patient/list";
 		} catch (Exception e) {
@@ -98,9 +89,7 @@ public class PatientServiceImpl implements PatientService {
 	@Override
 	public String deletePatient(Long id) {
 		try {
-
-			webClient.build().get().uri("http://gateway/patient-api/patient/delete/" + id).retrieve()
-					.bodyToFlux(Void.class).blockLast();
+			patientProxy.deletePatient(id);
 
 			return "redirect:/patient/list";
 		} catch (Exception e) {

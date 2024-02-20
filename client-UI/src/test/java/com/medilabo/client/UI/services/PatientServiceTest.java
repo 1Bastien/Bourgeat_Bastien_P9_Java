@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.ui.Model;
 
 import com.medilabo.client.UI.Dto.PatientDto;
+import com.medilabo.client.UI.proxies.PatientProxy;
 import com.medilabo.client.UI.services.impl.PatientServiceImpl;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,8 +18,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Flux;
 
 @ExtendWith(MockitoExtension.class)
 public class PatientServiceTest {
@@ -30,29 +29,8 @@ public class PatientServiceTest {
 	private Model model;
 
 	@Mock
-	private WebClient.Builder webClientBuilder;
+	private PatientProxy patientProxy;
 
-	@Mock
-	private WebClient webClientMock;
-
-	@SuppressWarnings("rawtypes")
-	@Mock
-	private WebClient.RequestHeadersSpec requestHeadersMock;
-
-	@SuppressWarnings("rawtypes")
-	@Mock
-	private WebClient.RequestHeadersUriSpec requestHeadersUriMock;
-
-	@Mock
-	private WebClient.RequestBodySpec requestBodyMock;
-
-	@Mock
-	private WebClient.RequestBodyUriSpec requestBodyUriMock;
-
-	@Mock
-	private WebClient.ResponseSpec responseMock;
-
-	@SuppressWarnings("unchecked")
 	@Test
 	void testGetPatientsList() {
 		PatientDto patient = new PatientDto();
@@ -62,23 +40,16 @@ public class PatientServiceTest {
 		List<PatientDto> patientsList = new ArrayList<>();
 		patientsList.add(patient);
 
-		when(webClientBuilder.build()).thenReturn(webClientMock);
-
-		when(webClientMock.get()).thenReturn(requestHeadersUriMock);
-		when(requestHeadersUriMock.uri("http://gateway/patient-api/patient/all")).thenReturn(requestHeadersMock);
-		when(requestHeadersMock.retrieve()).thenReturn(responseMock);
-		when(responseMock.bodyToFlux(PatientDto.class)).thenReturn(Flux.fromIterable(patientsList));
+		when(patientProxy.getPatientsList()).thenReturn(patientsList);
 
 		String result = patientService.getPatientsList(model);
 
-		verify(webClientMock.get().uri("http://gateway/patient-api/patient/all").retrieve())
-				.bodyToFlux(PatientDto.class);
+		verify(patientProxy).getPatientsList();
 		verify(model).addAttribute("patients", patientsList);
 
 		assertEquals("patient/list", result);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	void testGetPatient() {
 		Long patientId = 1L;
@@ -86,24 +57,16 @@ public class PatientServiceTest {
 		patientDto.setId(patientId);
 		patientDto.setFirstName("John");
 
-		when(webClientBuilder.build()).thenReturn(webClientMock);
-
-		when(webClientMock.get()).thenReturn(requestHeadersUriMock);
-		when(requestHeadersUriMock.uri("http://gateway/patient-api/patient/" + patientId))
-				.thenReturn(requestHeadersMock);
-		when(requestHeadersMock.retrieve()).thenReturn(responseMock);
-		when(responseMock.bodyToFlux(PatientDto.class)).thenReturn(Flux.just(patientDto));
+		when(patientProxy.getPatient(patientId)).thenReturn(patientDto);
 
 		String result = patientService.getPatient(patientId, model);
 
-		verify(webClientMock.get().uri("http://gateway/patient-api/patient/" + patientId).retrieve())
-				.bodyToFlux(PatientDto.class);
+		verify(patientProxy).getPatient(patientId);
 		verify(model).addAttribute("patient", patientDto);
 
 		assertEquals("patient/update", result);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	void testUpdatePatient() {
 		Long patientId = 1L;
@@ -116,19 +79,9 @@ public class PatientServiceTest {
 		newPatient.setPhoneNumber("123-456-7890");
 		newPatient.setGender("M");
 
-		when(webClientBuilder.build()).thenReturn(webClientMock);
-
-		when(webClientMock.post()).thenReturn(requestBodyUriMock);
-		when(requestBodyUriMock.uri("http://gateway/patient-api/patient/update/" + patientId))
-				.thenReturn(requestBodyMock);
-		when(requestBodyMock.bodyValue(newPatient)).thenReturn(requestHeadersMock);
-		when(requestHeadersMock.retrieve()).thenReturn(responseMock);
-		when(responseMock.bodyToFlux(PatientDto.class)).thenReturn(Flux.just(newPatient));
-
 		String result = patientService.updatePatient(patientId, newPatient);
 
-		verify(webClientMock.post().uri("http://gateway/patient-api/patient/update/" + patientId).bodyValue(newPatient)
-				.retrieve()).bodyToFlux(PatientDto.class);
+		verify(patientProxy).updatePatient(patientId, newPatient);
 
 		assertEquals("redirect:/patient/list", result);
 	}
@@ -143,7 +96,6 @@ public class PatientServiceTest {
 		assertEquals("patient/add", result);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	void testAddPatient() {
 		PatientDto newPatient = new PatientDto();
@@ -155,38 +107,20 @@ public class PatientServiceTest {
 		newPatient.setPhoneNumber("123-456-7890");
 		newPatient.setGender("M");
 
-		when(webClientBuilder.build()).thenReturn(webClientMock);
-
-		when(webClientMock.post()).thenReturn(requestBodyUriMock);
-		when(requestBodyUriMock.uri("http://gateway/patient-api/patient")).thenReturn(requestBodyMock);
-		when(requestBodyMock.bodyValue(newPatient)).thenReturn(requestHeadersMock);
-		when(requestHeadersMock.retrieve()).thenReturn(responseMock);
-		when(responseMock.bodyToFlux(PatientDto.class)).thenReturn(Flux.just(newPatient));
-
 		String result = patientService.addPatient(newPatient);
 
-		verify(webClientMock.post().uri("http://gateway/patient-api/patient").bodyValue(newPatient).retrieve())
-				.bodyToFlux(PatientDto.class);
+		verify(patientProxy).addPatient(newPatient);
 
 		assertEquals("redirect:/patient/list", result);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	void testDeletePatient() {
 		Long patientId = 1L;
 
-		when(webClientBuilder.build()).thenReturn(webClientMock);
-		when(webClientMock.get()).thenReturn(requestHeadersUriMock);
-		when(requestHeadersUriMock.uri("http://gateway/patient-api/patient/delete/" + patientId))
-				.thenReturn(requestHeadersMock);
-		when(requestHeadersMock.retrieve()).thenReturn(responseMock);
-		when(responseMock.bodyToFlux(Void.class)).thenReturn(Flux.empty());
-
 		String result = patientService.deletePatient(patientId);
-		
-		verify(webClientMock.get().uri("http://gateway/patient-api/patient/delete/" + patientId).retrieve())
-				.bodyToFlux(Void.class);
+
+		verify(patientProxy).deletePatient(patientId);
 
 		assertEquals("redirect:/patient/list", result);
 	}
