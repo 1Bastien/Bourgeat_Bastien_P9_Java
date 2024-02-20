@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 
 import com.medilabo.client.UI.Dto.FeedbackDto;
 import com.medilabo.client.UI.Dto.PatientDto;
+import com.medilabo.client.UI.proxies.AssessmentProxy;
 import com.medilabo.client.UI.proxies.FeedbackProxy;
 import com.medilabo.client.UI.proxies.PatientProxy;
 import com.medilabo.client.UI.services.impl.FeedbackServiceImpl;
@@ -35,6 +36,9 @@ public class FeedbackServiceTest {
 	
 	@Mock
 	private PatientProxy patientProxy;
+	
+	@Mock
+	private AssessmentProxy assessmentProxy;
 
 	@Test
 	void getFeedback() {
@@ -49,11 +53,38 @@ public class FeedbackServiceTest {
 
 		when(patientProxy.getPatient(patientId)).thenReturn(patientDto);
 		when(feedbackProxy.getFeedbacks(patientId)).thenReturn(feedbackDtoList);
+		when(assessmentProxy.getAssessment(patientId)).thenReturn("None");
 
 		String result = feedbackService.getFeedback(patientId, mock(Model.class));
 
 		verify(feedbackProxy).getFeedbacks(patientId);
+		verify(patientProxy).getPatient(patientId);
+		verify(assessmentProxy).getAssessment(patientId);
+		
+		assertEquals("patient/feedback", result);
+	}
+	
+	@Test
+	void getFeedbackWithAssessmentDifferent() {
+		Long patientId = 1L;
+		PatientDto patientDto = new PatientDto();
+		patientDto.setId(patientId);
+		patientDto.setFirstName("John");
+		patientDto.setLastName("Doe");
 
+		List<FeedbackDto> feedbackDtoList = new ArrayList<>();
+		feedbackDtoList.add(new FeedbackDto());
+
+		when(patientProxy.getPatient(patientId)).thenReturn(patientDto);
+		when(feedbackProxy.getFeedbacks(patientId)).thenReturn(feedbackDtoList);
+		when(assessmentProxy.getAssessment(patientId)).thenReturn("Boderline");
+
+		String result = feedbackService.getFeedback(patientId, mock(Model.class));
+
+		verify(feedbackProxy).getFeedbacks(patientId);
+		verify(patientProxy).getPatient(patientId);
+		verify(assessmentProxy).getAssessment(patientId);
+		
 		assertEquals("patient/feedback", result);
 	}
 
