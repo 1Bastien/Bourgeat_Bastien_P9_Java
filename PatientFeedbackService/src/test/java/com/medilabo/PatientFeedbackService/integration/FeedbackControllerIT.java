@@ -93,4 +93,17 @@ public class FeedbackControllerIT {
 		mockMvc.perform(get("/feedback/patient/1")).andExpect(status().isOk()).andExpect(content().json(
 				"[{\"patientId\":1,\"patientName\":\"TestIT\",\"date\":\"2024-02-14T12:00:00\",\"content\":\"Feedback test\"}]"));
 	}
+	
+	@Test
+	public void testCountWordOccurrences() throws Exception {
+		Feedback feedback = new Feedback();
+		feedback.setPatientId(1L);
+		feedback.setDate(LocalDateTime.parse("2024-02-14T12:00"));
+		feedback.setPatientName("TestIT");
+		feedback.setContent("Good feedback");
+		feedbackRepository.insert(feedback);
+
+		mockMvc.perform(get("/feedback/patient/assessment/1?keywords=good")).andExpect(status().isOk())
+				.andExpect(content().string("1"));
+	}
 }
