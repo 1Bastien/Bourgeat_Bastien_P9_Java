@@ -34,7 +34,7 @@ public class AssessmentServiceImpl implements AssessmentService {
 	}
 
 	@Override
-	public AssessmentType getAssessment(Long patientId) {
+	public String getAssessment(Long patientId) {
 		try {
 			List<String> keywords = Arrays.asList(Keywords.values()).stream().map(Keywords::getKeyword)
 					.collect(Collectors.toList());
@@ -43,16 +43,11 @@ public class AssessmentServiceImpl implements AssessmentService {
 			PatientDto patient = patientProxy.getPatient(patientId);
 
 			int age = Period.between(patient.getDateOfBirth(), LocalDate.now()).getYears();
-
-			System.out.println("age: " + age);
-			System.out.println("keywordsOccurences: " + keywordsOccurences);
-			System.out.println("patient: " + patient.getGender());
-			
 			
 			AssessmentType assessmentType = AssessmentType.NONE;
 
 			if (keywordsOccurences == 0) {
-				return assessmentType;
+				return assessmentType.getType();
 			}
 
 			switch (patient.getGender()) {
@@ -90,7 +85,7 @@ public class AssessmentServiceImpl implements AssessmentService {
 				break;
 			}
 
-			return assessmentType;
+			return assessmentType.getType();
 
 		} catch (Exception e) {
 			logger.error("Error while getting assessment", e);

@@ -47,9 +47,9 @@ public class AssessmentServiceTest {
 				Arrays.asList(Keywords.values()).stream().map(Keywords::getKeyword).collect(Collectors.toList())))
 				.thenReturn(keywordsOccurences);
 
-		AssessmentType assessmentType = assessmentService.getAssessment(patientId);
+		String assessmentType = assessmentService.getAssessment(patientId);
 
-		assertEquals(AssessmentType.NONE, assessmentType);
+		assertEquals(AssessmentType.NONE.getType(), assessmentType);
 	}
 	
 	@Test
@@ -66,9 +66,9 @@ public class AssessmentServiceTest {
 				Arrays.asList(Keywords.values()).stream().map(Keywords::getKeyword).collect(Collectors.toList())))
 				.thenReturn(keywordsOccurences);
 
-		AssessmentType assessmentType = assessmentService.getAssessment(patientId);
+		String assessmentType = assessmentService.getAssessment(patientId);
 
-		assertEquals(AssessmentType.IN_DANGER, assessmentType);
+		assertEquals(AssessmentType.IN_DANGER.getType(), assessmentType);
 	}
 	
 	@Test
@@ -85,9 +85,9 @@ public class AssessmentServiceTest {
 				Arrays.asList(Keywords.values()).stream().map(Keywords::getKeyword).collect(Collectors.toList())))
 				.thenReturn(keywordsOccurences);
 
-		AssessmentType assessmentType = assessmentService.getAssessment(patientId);
+		String assessmentType = assessmentService.getAssessment(patientId);
 
-		assertEquals(AssessmentType.EARLY_ONSET, assessmentType);
+		assertEquals(AssessmentType.EARLY_ONSET.getType(), assessmentType);
 	}
 	
 	@Test
@@ -104,9 +104,9 @@ public class AssessmentServiceTest {
 				Arrays.asList(Keywords.values()).stream().map(Keywords::getKeyword).collect(Collectors.toList())))
 				.thenReturn(keywordsOccurences);
 
-		AssessmentType assessmentType = assessmentService.getAssessment(patientId);
+		String assessmentType = assessmentService.getAssessment(patientId);
 
-		assertEquals(AssessmentType.BORDERLINE, assessmentType);
+		assertEquals(AssessmentType.BORDERLINE.getType(), assessmentType);
 	}
 	
 	@Test
@@ -123,9 +123,9 @@ public class AssessmentServiceTest {
 				Arrays.asList(Keywords.values()).stream().map(Keywords::getKeyword).collect(Collectors.toList())))
 				.thenReturn(keywordsOccurences);
 
-		AssessmentType assessmentType = assessmentService.getAssessment(patientId);
+		String assessmentType = assessmentService.getAssessment(patientId);
 
-		assertEquals(AssessmentType.IN_DANGER, assessmentType);
+		assertEquals(AssessmentType.IN_DANGER.getType(), assessmentType);
 	}
 	
 	@Test
@@ -142,9 +142,9 @@ public class AssessmentServiceTest {
 				Arrays.asList(Keywords.values()).stream().map(Keywords::getKeyword).collect(Collectors.toList())))
 				.thenReturn(keywordsOccurences);
 
-		AssessmentType assessmentType = assessmentService.getAssessment(patientId);
+		String assessmentType = assessmentService.getAssessment(patientId);
 
-		assertEquals(AssessmentType.EARLY_ONSET, assessmentType);
+		assertEquals(AssessmentType.EARLY_ONSET.getType(), assessmentType);
 	}
 	
 	@Test
@@ -161,9 +161,9 @@ public class AssessmentServiceTest {
 				Arrays.asList(Keywords.values()).stream().map(Keywords::getKeyword).collect(Collectors.toList())))
 				.thenReturn(keywordsOccurences);
 
-		AssessmentType assessmentType = assessmentService.getAssessment(patientId);
+		String assessmentType = assessmentService.getAssessment(patientId);
 
-		assertEquals(AssessmentType.IN_DANGER, assessmentType);
+		assertEquals(AssessmentType.IN_DANGER.getType(), assessmentType);
 	}
 	
 	@Test
@@ -180,9 +180,9 @@ public class AssessmentServiceTest {
 				Arrays.asList(Keywords.values()).stream().map(Keywords::getKeyword).collect(Collectors.toList())))
 				.thenReturn(keywordsOccurences);
 
-		AssessmentType assessmentType = assessmentService.getAssessment(patientId);
+		String assessmentType = assessmentService.getAssessment(patientId);
 
-		assertEquals(AssessmentType.EARLY_ONSET, assessmentType);
+		assertEquals(AssessmentType.EARLY_ONSET.getType(), assessmentType);
 	}
 	
 	@Test
@@ -199,9 +199,9 @@ public class AssessmentServiceTest {
 				Arrays.asList(Keywords.values()).stream().map(Keywords::getKeyword).collect(Collectors.toList())))
 				.thenReturn(keywordsOccurences);
 
-		AssessmentType assessmentType = assessmentService.getAssessment(patientId);
+		String assessmentType = assessmentService.getAssessment(patientId);
 
-		assertEquals(AssessmentType.IN_DANGER, assessmentType);
+		assertEquals(AssessmentType.IN_DANGER.getType(), assessmentType);
 	}
 	
 	@Test
@@ -218,8 +218,8 @@ public class AssessmentServiceTest {
 				Arrays.asList(Keywords.values()).stream().map(Keywords::getKeyword).collect(Collectors.toList())))
 				.thenReturn(keywordsOccurences);
 
-		AssessmentType assessmentType = assessmentService.getAssessment(patientId);
+		String assessmentType = assessmentService.getAssessment(patientId);
 
-		assertEquals(AssessmentType.EARLY_ONSET, assessmentType);
+		assertEquals(AssessmentType.EARLY_ONSET.getType(), assessmentType);
 	}
 }
