@@ -1,0 +1,94 @@
+version: '3'
+services:
+  config-srv:
+    hostname: config-srv
+    build: ./config-srv
+    
+  eureka-srv:
+    hostname: eureka-srv
+    build: ./eureka-srv
+    ports:
+      - "9001:9001"
+    depends_on:
+      - config-srv
+    environment:
+      WAIT_HOSTS: config-srv:9000
+      
+  auth-srv:
+    hostname: auth-srv
+    build: ./auth-srv
+    ports:
+      - "9003:9003"
+    depends_on:
+      - config-srv
+      - eureka-srv
+    environment:
+      WAIT_HOSTS: config-srv:9000, eureka-srv:9001
+      
+  gateway:
+    hostname: gateway
+    build: ./gateway
+    ports:
+      - "9002:9002"
+    depends_on:
+      - config-srv
+      - eureka-srv
+      - auth-srv 
+    environment:
+      WAIT_HOSTS: config-srv:9000, eureka-srv:9001, auth-srv:9003
+      
+  mysql-db:
+    hostname: mysql-db
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: patientApi
+    
+  patient-api:
+    hostname: patient-api
+    build: ./patient-api
+    depends_on:
+      - config-srv
+      - eureka-srv
+      - mysql-db
+    environment:
+      WAIT_HOSTS: config-srv:9000, eureka-srv:9001, mysql-db:3306
+
+  mongodb:
+    hostname: mongodb
+    image: mongo:latest
+      
+  feedback-service:
+    hostname: feedback-service
+    build: ./feedback-service
+    depends_on:
+      - config-srv
+      - eureka-srv
+      - mongodb
+    environment:
+      WAIT_HOSTS: config-srv:9000, eureka-srv:9001, mongodb:27017
+      
+  assessment-service:
+    hostname: assessment-service
+    build: ./assessment-service
+    depends_on:
+      - config-srv
+      - eureka-srv
+    environment:
+      WAIT_HOSTS: config-srv:9000, eureka-srv:9001
+      
+  client-ui:
+    hostname: client-ui
+    build: ./client-ui
+    ports:
+      - "9101:9101"
+    depends_on:
+      - config-srv
+      - eureka-srv
+      - auth-srv
+      - gateway
+      - patient-api
+      - feedback-service
+      - assessment-service
+    environment:
+      WAIT_HOSTS: config-srv:9000, eureka-srv:9001, auth-srv:9003, gateway:9002
