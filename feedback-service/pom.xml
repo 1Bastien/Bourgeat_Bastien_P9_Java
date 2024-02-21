@@ -10,9 +10,9 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.medilabo</groupId>
-	<artifactId>PatientFeedbackService</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>PatientFeedbackService</name>
+	<artifactId>feedback-service</artifactId>
+	<version>1.0.0</version>
+	<name>Patient Feedback Service</name>
 	<description>Patient Feedback Service</description>
 	<properties>
 		<java.version>21</java.version>

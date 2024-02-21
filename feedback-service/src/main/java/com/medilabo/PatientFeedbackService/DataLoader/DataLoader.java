@@ -38,7 +38,7 @@ public class DataLoader implements CommandLineRunner {
 			patientFeedbackRepository.insert(feedback1);
 
 			Feedback feedback2 = new Feedback();
-			feedback2.setPatientId(Long.valueOf(2));
+			feedback1.setPatientId(Long.valueOf(2));
 			feedback2.setPatientName("TestBorderline");
 			feedback2.setDate(LocalDateTime.now());
 			feedback2.setContent(
@@ -46,7 +46,7 @@ public class DataLoader implements CommandLineRunner {
 			patientFeedbackRepository.insert(feedback2);
 
 			Feedback feedback3 = new Feedback();
-			feedback3.setPatientId(Long.valueOf(2));
+			feedback1.setPatientId(Long.valueOf(2));
 			feedback2.setPatientName("TestBorderline");
 			feedback3.setDate(LocalDateTime.now());
 			feedback3.setContent(
