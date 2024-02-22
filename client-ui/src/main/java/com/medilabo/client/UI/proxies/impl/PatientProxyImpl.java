@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -21,10 +22,13 @@ public class PatientProxyImpl implements PatientProxy {
 	@Autowired
 	private WebClient.Builder webClient;
 
+	@Value("${patient.api.url}")
+	private String patientApiUrl;
+
 	@Override
 	public List<PatientDto> getPatientsList() {
 		try {
-			List<PatientDto> patients = webClient.build().get().uri("http://gateway/patient-api/patient/all").retrieve()
+			List<PatientDto> patients = webClient.build().get().uri(patientApiUrl + "/all").retrieve()
 					.bodyToFlux(PatientDto.class).collectList().flux().blockLast();
 
 			logger.info("Patients fetched successfully");
@@ -38,8 +42,8 @@ public class PatientProxyImpl implements PatientProxy {
 	@Override
 	public PatientDto getPatient(Long id) {
 		try {
-			PatientDto patient = webClient.build().get().uri("http://gateway/patient-api/patient/" + id).retrieve()
-					.bodyToFlux(PatientDto.class).blockLast();
+			PatientDto patient = webClient.build().get().uri(patientApiUrl + "/" + id).retrieve().bodyToFlux(PatientDto.class)
+					.blockLast();
 
 			logger.info("Patient fetched successfully");
 			return patient;
@@ -52,8 +56,8 @@ public class PatientProxyImpl implements PatientProxy {
 	@Override
 	public void updatePatient(Long id, PatientDto newPatient) {
 		try {
-			webClient.build().post().uri("http://gateway/patient-api/patient/update/" + id).bodyValue(newPatient)
-					.retrieve().bodyToFlux(PatientDto.class).blockLast();
+			webClient.build().post().uri(patientApiUrl + "/update/" + id).bodyValue(newPatient).retrieve()
+					.bodyToFlux(PatientDto.class).blockLast();
 
 			logger.info("Patient updated successfully");
 		} catch (Exception e) {
@@ -65,8 +69,8 @@ public class PatientProxyImpl implements PatientProxy {
 	@Override
 	public void addPatient(PatientDto patient) {
 		try {
-			webClient.build().post().uri("http://gateway/patient-api/patient").bodyValue(patient).retrieve()
-					.bodyToFlux(PatientDto.class).blockLast();
+			webClient.build().post().uri(patientApiUrl).bodyValue(patient).retrieve().bodyToFlux(PatientDto.class)
+					.blockLast();
 
 			logger.info("Patient added successfully");
 		} catch (Exception e) {
@@ -78,8 +82,7 @@ public class PatientProxyImpl implements PatientProxy {
 	@Override
 	public void deletePatient(Long id) {
 		try {
-			webClient.build().get().uri("http://gateway/patient-api/patient/delete/" + id).retrieve()
-					.bodyToFlux(Void.class).blockLast();
+			webClient.build().get().uri(patientApiUrl + "/delete/" + id).retrieve().bodyToFlux(Void.class).blockLast();
 
 			logger.info("Patient deleted successfully");
 		} catch (Exception e) {
