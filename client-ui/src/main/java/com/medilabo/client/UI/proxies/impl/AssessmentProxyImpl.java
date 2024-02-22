@@ -3,6 +3,7 @@ package com.medilabo.client.UI.proxies.impl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -18,15 +19,17 @@ public class AssessmentProxyImpl implements AssessmentProxy {
 	@Autowired
 	private WebClient.Builder webClient;
 
+	@Value("${assessment.service.url}")
+	private String assessmentServiceUrl;
+
 	@Override
 	public String getAssessment(Long patientId) {
 		try {
-			String AssessmentType = webClient.build().get()
-					.uri("http://gateway/assessment-service/assessment/" + patientId).retrieve()
+			String assessmentType = webClient.build().get().uri(assessmentServiceUrl + patientId).retrieve()
 					.bodyToFlux(String.class).blockLast();
 
 			logger.info("Assessment fetched successfully");
-			return AssessmentType;
+			return assessmentType;
 		} catch (Exception e) {
 			logger.error("Error while trying to get assessment: " + e.getMessage());
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while fetching assessment");

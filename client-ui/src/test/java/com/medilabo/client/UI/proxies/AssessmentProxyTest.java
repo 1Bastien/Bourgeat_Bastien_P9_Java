@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ui.Model;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -21,6 +22,9 @@ public class AssessmentProxyTest {
 
 	@InjectMocks
 	private AssessmentProxyImpl assessmentProxy;
+	
+	@Value("${assessment.service.url}")
+	private String assessmentServiceUrl;
 
 	@Mock
 	private Model model;
@@ -57,14 +61,14 @@ public class AssessmentProxyTest {
 		when(webClientBuilder.build()).thenReturn(webClientMock);
 
 		when(webClientMock.get()).thenReturn(requestHeadersUriMock);
-		when(requestHeadersUriMock.uri("http://gateway/assessment-service/assessment/" + patientId))
+		when(requestHeadersUriMock.uri(assessmentServiceUrl + patientId))
 				.thenReturn(requestHeadersMock);
 		when(requestHeadersMock.retrieve()).thenReturn(responseMock);
 		when(responseMock.bodyToFlux(String.class)).thenReturn(Flux.just(assessment));
 
 		String result = assessmentProxy.getAssessment(patientId);
 
-		verify(webClientMock.get().uri("http://gateway/assessment-service/assessment/" + patientId).retrieve())
+		verify(webClientMock.get().uri(assessmentServiceUrl + patientId).retrieve())
 				.bodyToFlux(String.class);
 
 		assertEquals(assessment, result);
