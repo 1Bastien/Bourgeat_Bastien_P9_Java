@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.medilabo.client.UI.Dto.FeedbackDto;
@@ -25,6 +26,9 @@ public class FeedbackProxyTest {
 
 	@InjectMocks
 	private FeedbackProxyImpl feedbackProxy;
+	
+	@Value("${feedback.service.url}")
+	private String feedbackServiceUrl;
 
 	@Mock
 	private WebClient.Builder webClientBuilder;
@@ -67,14 +71,14 @@ public class FeedbackProxyTest {
 		when(webClientBuilder.build()).thenReturn(webClientMock);
 
 		when(webClientMock.post()).thenReturn(requestBodyUriMock);
-		when(requestBodyUriMock.uri("http://gateway/feedback-service/feedback/patient")).thenReturn(requestBodyMock);
+		when(requestBodyUriMock.uri(feedbackServiceUrl)).thenReturn(requestBodyMock);
 		when(requestBodyMock.bodyValue(feedbackDto)).thenReturn(requestHeadersMock);
 		when(requestHeadersMock.retrieve()).thenReturn(responseMock);
 		when(responseMock.bodyToFlux(FeedbackDto.class)).thenReturn(Flux.just(feedbackDto));
 
 		feedbackProxy.addFeedback(feedbackDto);
 
-		verify(webClientMock.post().uri("http://gateway/feedback-service/feedback/patient").bodyValue(feedbackDto)
+		verify(webClientMock.post().uri(feedbackServiceUrl).bodyValue(feedbackDto)
 				.retrieve()).bodyToFlux(FeedbackDto.class);
 	}
 	
@@ -93,14 +97,14 @@ public class FeedbackProxyTest {
 		when(webClientBuilder.build()).thenReturn(webClientMock);
 
 		when(webClientMock.get()).thenReturn(requestHeadersUriMock);
-		when(requestHeadersUriMock.uri("http://gateway/feedback-service/feedback/patient/" + patientId))
+		when(requestHeadersUriMock.uri(feedbackServiceUrl + patientId))
 				.thenReturn(requestHeadersMock);
 		when(requestHeadersMock.retrieve()).thenReturn(responseMock);
 		when(responseMock.bodyToFlux(FeedbackDto.class)).thenReturn(Flux.fromIterable(feedbackDtoList));
 
 		feedbackProxy.getFeedbacks(patientId);
 
-		verify(webClientMock.get().uri("http://gateway/feedback-service/feedback/patient/" + patientId).retrieve())
+		verify(webClientMock.get().uri(feedbackServiceUrl + patientId).retrieve())
 				.bodyToFlux(FeedbackDto.class);
 	}
 }

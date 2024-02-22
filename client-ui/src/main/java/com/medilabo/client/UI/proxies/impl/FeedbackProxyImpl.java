@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -21,11 +22,13 @@ public class FeedbackProxyImpl implements FeedbackProxy {
 	@Autowired
 	private WebClient.Builder webClient;
 
+	@Value("${feedback.service.url}")
+	private String feedbackServiceUrl;
+
 	@Override
 	public List<FeedbackDto> getFeedbacks(Long patientId) {
 		try {
-			List<FeedbackDto> feedbacks = webClient.build().get()
-					.uri("http://gateway/feedback-service/feedback/patient/" + patientId).retrieve()
+			List<FeedbackDto> feedbacks = webClient.build().get().uri(feedbackServiceUrl + patientId).retrieve()
 					.bodyToFlux(FeedbackDto.class).collectList().flux().blockLast();
 
 			logger.info("Feedbacks fetched successfully");
@@ -40,8 +43,8 @@ public class FeedbackProxyImpl implements FeedbackProxy {
 	@Override
 	public void addFeedback(FeedbackDto feedback) {
 		try {
-			webClient.build().post().uri("http://gateway/feedback-service/feedback/patient").bodyValue(feedback)
-					.retrieve().bodyToFlux(FeedbackDto.class).blockLast();
+			webClient.build().post().uri(feedbackServiceUrl).bodyValue(feedback).retrieve()
+					.bodyToFlux(FeedbackDto.class).blockLast();
 
 			logger.info("Feedback added successfully");
 		} catch (Exception e) {
@@ -49,5 +52,4 @@ public class FeedbackProxyImpl implements FeedbackProxy {
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while adding feedback");
 		}
 	}
-
 }
