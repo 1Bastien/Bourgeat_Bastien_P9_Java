@@ -33,3 +33,11 @@ Le projet est composé de plusieurs microservices :
 
 Chaque microservice est Dockerisé avec un docker-compose pour les gérer.
 
+## Configuration des Fichiers
+
+Les fichiers de configuration nécessaires au bon fonctionnement de l'application sont stockés dans un référentiel dédié. 
+Vous pouvez accéder à ce référentiel via le lien suivant :
+
+[Configuration Repository](https://github.com/1Bastien/Bourgeat_Bastien_P9_ConfigSrvRepo)
+
+
