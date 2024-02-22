@@ -40,7 +40,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 
 		} catch (Exception e) {
 			logger.error("Error while getting feedbacks", e);
-			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while getting feedbacks");
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error while getting feedbacks");
 		}
 	}
 
