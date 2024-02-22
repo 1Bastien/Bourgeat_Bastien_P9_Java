@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.medilabo.assessmentservice.Dto.PatientDto;
@@ -21,6 +22,9 @@ public class PatientProxyTest {
 
 	@InjectMocks
 	private PatientProxyImpl patientProxy;
+	
+	@Value("${patient.api.url}")
+	private String patientApiUrl;
 
 	@Mock
 	private WebClient.Builder webClientBuilder;
@@ -50,13 +54,13 @@ public class PatientProxyTest {
 		when(webClientBuilder.build()).thenReturn(webClientMock);
 
 		when(webClientMock.get()).thenReturn(requestHeadersUriMock);
-		when(requestHeadersUriMock.uri("http://patient-api/patient/" + patientId)).thenReturn(requestHeadersMock);
+		when(requestHeadersUriMock.uri(patientApiUrl + patientId)).thenReturn(requestHeadersMock);
 		when(requestHeadersMock.retrieve()).thenReturn(responseMock);
 		when(responseMock.bodyToFlux(PatientDto.class)).thenReturn(Flux.just(patientDto));
 
 		PatientDto patient = patientProxy.getPatient(patientId);
 
-		verify(webClientMock.get().uri("http://patient-api/patient/" + patientId).retrieve())
+		verify(webClientMock.get().uri(patientApiUrl + patientId).retrieve())
 				.bodyToFlux(PatientDto.class);
 
 		assertEquals(patientDto, patient);

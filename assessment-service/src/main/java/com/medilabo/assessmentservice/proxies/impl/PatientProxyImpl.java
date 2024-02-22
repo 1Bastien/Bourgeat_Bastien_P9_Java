@@ -3,6 +3,7 @@ package com.medilabo.assessmentservice.proxies.impl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -18,11 +19,14 @@ public class PatientProxyImpl implements PatientProxy {
 
 	@Autowired
 	private WebClient.Builder webClient;
+	
+	@Value("${patient.api.url}")
+	private String patientApiUrl;
 
 	@Override
 	public PatientDto getPatient(Long id) {
 		try {
-			PatientDto patient = webClient.build().get().uri("http://patient-api/patient/" + id).retrieve()
+			PatientDto patient = webClient.build().get().uri(patientApiUrl + id).retrieve()
 					.bodyToFlux(PatientDto.class).blockLast();
 
 			logger.info("Patient fetched successfully");
