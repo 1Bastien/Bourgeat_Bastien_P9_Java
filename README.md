@@ -2,6 +2,8 @@
 
 Médilabo est un projet étudiant ayant pour objectif de créer un outil pour aider les médecins à identifier les patients les plus à risque de développer du diabète. Il s'agit d'une application en architecture Micro-Service développée avec Java Spring et Dockerisée.
 
+**Vous pouvez visualiser l'application à l'aide du fichier docker-compose ou des captures d'écran disponibles à la fin du README.**
+
 ## Contexte
 
 Les patients souffrant de mauvais choix nutritionnels sont particulièrement exposés au diabète de type 2. Pour prévenir cette maladie, il est important de pouvoir identifier les patients à risque et de leur fournir les conseils et les soins appropriés. C'est dans ce contexte que le projet Médilabo a été développé.
@@ -41,3 +43,8 @@ Vous pouvez accéder à ce référentiel via le lien suivant :
 [Configuration Repository](https://github.com/1Bastien/Bourgeat_Bastien_P9_ConfigSrvRepo)
 
 
+## Captures d'écran du site
+
+![patient_list](/images/patient-list.png)
+![patient](/images/patient.png)
+![home](/images/home.png)
