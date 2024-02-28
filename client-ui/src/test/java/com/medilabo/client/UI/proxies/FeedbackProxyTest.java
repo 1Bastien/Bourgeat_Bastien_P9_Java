@@ -97,14 +97,14 @@ public class FeedbackProxyTest {
 		when(webClientBuilder.build()).thenReturn(webClientMock);
 
 		when(webClientMock.get()).thenReturn(requestHeadersUriMock);
-		when(requestHeadersUriMock.uri(feedbackServiceUrl + patientId))
+		when(requestHeadersUriMock.uri(feedbackServiceUrl + "/" + patientId))
 				.thenReturn(requestHeadersMock);
 		when(requestHeadersMock.retrieve()).thenReturn(responseMock);
 		when(responseMock.bodyToFlux(FeedbackDto.class)).thenReturn(Flux.fromIterable(feedbackDtoList));
 
 		feedbackProxy.getFeedbacks(patientId);
 
-		verify(webClientMock.get().uri(feedbackServiceUrl + patientId).retrieve())
+		verify(webClientMock.get().uri(feedbackServiceUrl + "/" + patientId).retrieve())
 				.bodyToFlux(FeedbackDto.class);
 	}
 }

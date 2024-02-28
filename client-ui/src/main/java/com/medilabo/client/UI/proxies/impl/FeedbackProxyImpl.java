@@ -28,7 +28,7 @@ public class FeedbackProxyImpl implements FeedbackProxy {
 	@Override
 	public List<FeedbackDto> getFeedbacks(Long patientId) {
 		try {
-			List<FeedbackDto> feedbacks = webClient.build().get().uri(feedbackServiceUrl + patientId).retrieve()
+			List<FeedbackDto> feedbacks = webClient.build().get().uri(feedbackServiceUrl + "/" + patientId).retrieve()
 					.bodyToFlux(FeedbackDto.class).collectList().flux().blockLast();
 
 			logger.info("Feedbacks fetched successfully");
