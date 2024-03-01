@@ -2,7 +2,7 @@
 
 Médilabo est un projet étudiant ayant pour objectif de créer un outil pour aider les médecins à identifier les patients les plus à risque de développer du diabète. Il s'agit d'une application en architecture Micro-Service développée avec Java Spring et Dockerisée.
 
-**Vous pouvez visualiser l'application à l'aide du fichier docker-compose ou des captures d'écran disponibles à la fin du README.**
+**Vous pouvez visualiser l'application en l'installant avec docker-compose ou en consultant les captures d'écran disponibles à la fin du README.**
 
 ## Contexte
 
