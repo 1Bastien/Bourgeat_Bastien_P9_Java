@@ -42,6 +42,27 @@ Vous pouvez accéder à ce référentiel via le lien suivant :
 
 [Configuration Repository](https://github.com/1Bastien/Bourgeat_Bastien_P9_ConfigSrvRepo)
 
+## Prérequis
+
+- Java
+- Maven
+- Docker & docker-compose
+
+## Installation
+
+```bash
+git clone https://github.com/1Bastien/Bourgeat_Bastien_P9_Java
+```
+```
+cd Bourgeat_Bastien_P9_Java
+```
+```
+# Exécutez cette commande une seule fois pour chaque micro-service lors de la première installation.
+mvn clean package
+```
+```
+docker-compose up
+```
 
 ## Captures d'écran du site
 
